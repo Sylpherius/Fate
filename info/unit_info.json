@@ -1,0 +1,27 @@
+{
+	"unit_info": [
+        {
+			"name": "slime",
+			"desc": "",
+			"traits": "",
+			"health": 12,
+			"attacks": {
+				"slam": {
+					"damage": 5,
+					"count": 2,
+					"effects": []
+				},
+				"slime_shot": {
+					"damage": 2,
+					"count": 1,
+					"effects": ["ranged", "slows"]
+				}
+			},
+			"speed": 5,
+            "scale_size": 0.8,
+            "offset_x": 0.07,
+            "offset_y": 0.05,
+			"alpha": 200
+		}
+	]
+}

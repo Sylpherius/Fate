@@ -1,0 +1,19 @@
+Short-term goals:
+* Add basic UI for turn-based things
+* Only allow units to move if it's their turn
+
+
+Long-term goals:
+* Add more UI
+* Tiles/Units descriptions
+* Add UI for unit info
+* Add larger map + being able to pan around
+* Add invisible units + movement surprise things with that\
+* Add fog of war
+* Hover over a unit to see available movement
+* Add more details to attacks
+ * Add actually alternating attacks + death in the middle
+ * Take into account effects
+ * Add basic attack animations
+* Add UI for summoning creatures
+* Make it multiplayer

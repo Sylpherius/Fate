@@ -1,0 +1,24 @@
+{
+	"tile_info": [
+        {
+			"name": "blank",
+			"desc": "",
+			"traits": ""
+		},
+		{
+			"name": "void",
+			"desc": "",
+			"traits": ""
+		},
+		{
+			"name": "chosen",
+			"desc": "",
+			"traits": ""
+		},
+		{
+			"name": "difficult",
+			"desc": "",
+			"traits": "difficult"
+		}
+	]
+}
