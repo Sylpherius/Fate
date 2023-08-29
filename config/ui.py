@@ -7,12 +7,12 @@ from config.unit import Unit
 
 InterfaceLocation = namedtuple('InterfaceLocation', ['x', 'y', 'interface'])
 
+
 class UI:
     def __init__(self, app):
         self.buttons: List[Button] = []
         self.interfaces: List[InterfaceLocation] = []
         self.app = app
-        self.turn_counter = 0
 
     def draw_interfaces(self, screen):
         """
@@ -61,15 +61,8 @@ class UI:
     def end_turn(self) -> None:
         """
         Triggers the end turn sequence.
-
-         * Adds to the turn counter
-         * Resets all units' movement
         """
-        self.turn_counter += 1
-        for unit in self.app.get_active_units():
-            unit.set_can_attack(True)
-            unit.set_movement(unit.speed)
-            unit.take_damage(2)
+        self.app.increment_turn()
 
     @staticmethod
     def select_attack(unit, attack) -> None:
@@ -115,4 +108,3 @@ class UI:
         Cancels an attack and closes UI
         """
         self.app.ui_removal_list.append(constants.UI_BATTLE)
-

@@ -2,6 +2,8 @@ import pygame
 
 pygame.init()
 
+ALIGNMENTS = ['white', 'orange', 'purple', 'green']
+
 TILE_BLANK = "blank"
 TILE_VOID = "void"
 TILE_CHOSEN = "chosen"

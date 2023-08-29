@@ -10,7 +10,8 @@ AttackInfo = namedtuple('AttackInfo', ['damage', 'count', 'effects'])
 
 
 class Unit:
-    def __init__(self, name, desc, traits, health, attacks, speed, scale_size, offset_x, offset_y, alpha):
+    def __init__(self, name, desc, traits, health, attacks, speed, scale_size, offset_x, offset_y,
+                 ring_offset_x, ring_offset_y, alpha):
         self.name: str = name
         self.desc: str = desc
         self.traits: Set = set(traits.split(','))
@@ -24,9 +25,12 @@ class Unit:
         self.movement: int = speed
         self.offset_x = offset_x * constants.TILE_SIZE
         self.offset_y = offset_y * constants.TILE_SIZE
+        self.ring_offset_x = ring_offset_x
+        self.ring_offset_y = ring_offset_y
 
         self.original_alignment: str = ""
         self.alignment: str = ""
+        self.ring = None
         self.statuses: Set = set()
         self.healthbar = HealthBar(self)
         self.can_attack = True
@@ -47,6 +51,8 @@ class Unit:
     def update(self, screen, unit_x, unit_y):
         self.rect.x = unit_x + self.offset_x
         self.rect.y = unit_y + self.offset_y
+        if self.ring:
+            screen.blit(self.ring, (unit_x + self.ring_offset_x, unit_y + self.ring_offset_y))
         screen.blit(self.image, self.rect.topleft)
         self.healthbar.update(screen, self.health, self.max_health)
 
@@ -92,6 +98,8 @@ class Unit:
 
     def set_alignment(self, alignment):
         self.alignment = alignment
+        self.ring = pygame.image.load("assets/ring_" + alignment + ".png")
+        self.ring = pygame.transform.scale(self.ring, (constants.TILE_SIZE, constants.TILE_SIZE))
 
     def get_alignment(self, alignment):
         return self.alignment

@@ -37,7 +37,9 @@ class App:
         self.moving_sprites = pygame.sprite.Group()
         self.rows = 26
         self.cols = 10
-        self.alignments = ['white', 'blue', 'red', 'green', 'orange', 'yellow', 'purple', 'black']
+        self.alignments = constants.ALIGNMENTS
+        self.turn = 0
+
         # six directions to adjacent tiles
         # on even going left is the issue, on odd going right is the issue
         self.directions_even = [(-2, 0), (-1, 1), (1, 1), (2, 0), (1, 0), (-1, 0)]
@@ -69,7 +71,8 @@ class App:
         for unit in data["unit_info"]:
             self.unit_info[unit["name"]] = Unit(unit["name"], unit["desc"], unit["traits"], unit["health"],
                                                 unit["attacks"], unit["speed"], unit["scale_size"], unit["offset_x"],
-                                                unit["offset_y"], unit["alpha"])
+                                                unit["offset_y"], unit["ring_offset_x"], unit["ring_offset_y"],
+                                                unit["alpha"])
 
     def initialize_maps(self) -> None:
         """
@@ -347,7 +350,7 @@ class App:
         """
         x, y, old_unit = self.unit_map[tile.row][tile.col]
         unit_copy = copy.copy(unit)
-        unit_copy.alignment = alignment
+        unit_copy.set_original_alignment(alignment)
         self.unit_map[tile.row][tile.col] = XYUnit(x, y, unit_copy)
 
     def move_unit(self, unit: SelectedUnit, target_tile: SelectedTile,
@@ -431,6 +434,7 @@ class App:
         :param tile: start tile
         """
         self.start_tile = tile
+        self.set_start_unit(tile)
 
     def set_start_unit(self, tile: SelectedTile) -> None:
         """
@@ -439,7 +443,7 @@ class App:
         :param tile: name of tile start unit is on
         """
         unit = self.unit_map[tile.row][tile.col].unit
-        if unit is not None:
+        if unit is not None and unit.alignment == self.alignments[self.turn]:
             self.start_unit = SelectedUnit(tile.row, tile.col, unit)
 
     def is_mouse_on_tile(self, mouse_position: Tuple[int, int]) -> SelectedTile:
@@ -472,6 +476,17 @@ class App:
                     active_units.append(xyunit.unit)
 
         return active_units
+
+    def increment_turn(self):
+        """
+        Increase the turn
+         * resets all unit attack + movement
+        """
+        self.turn = (self.turn + 1) % len(self.alignments)
+        for unit in self.get_active_units():
+            unit.set_can_attack(True)
+            unit.set_movement(unit.speed)
+            unit.take_damage(2)
 
 
 def generate_attack_text(attack, attack_info) -> Tuple[List[Surface], List[Tuple[int, int]]]:

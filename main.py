@@ -28,8 +28,8 @@ app.initialize()
 left_click_handled = False
 right_click_handled = False
 app.spawn_unit(Position(1, 1), app.unit_info[constants.UNIT_SLIME], 'white')
-app.spawn_unit(Position(4, 4), app.unit_info[constants.UNIT_SLIME], 'blue')
-app.spawn_unit(Position(5, 4), app.unit_info[constants.UNIT_SLIME], 'blue')
+app.spawn_unit(Position(4, 4), app.unit_info[constants.UNIT_SLIME], 'orange')
+app.spawn_unit(Position(5, 4), app.unit_info[constants.UNIT_SLIME], 'orange')
 while True:
     screen.fill('black')
 
@@ -60,7 +60,6 @@ while True:
                 if hovered_tile:
                     if not app.start_unit:
                         app.set_start_tile(hovered_tile)
-                        app.set_start_unit(hovered_tile)
                     else:
                         app.start_tile = None
                         if app.start_unit is not None:

@@ -1,7 +1,14 @@
 Short-term goals:
-* Add basic UI for turn-based things
-* Only allow units to move if it's their turn
+* Next work on basic UI?
+ * big ui bar on bottom/right or smth
+ * add turn indicator
+ * unit description when clicked on
+ * just needs to be something to show some sort of info
+* After work on summoning tile/creature?
+ * Need to implement the "leader" of each alignment
 
+Bugs:
+* Fix pathway so that ally can't end on ally space when it's attacking an enemy
 
 Long-term goals:
 * Add more UI

@@ -21,6 +21,8 @@
             "scale_size": 0.8,
             "offset_x": 0.07,
             "offset_y": 0.05,
+			"ring_offset_x": -0.05,
+			"ring_offset_y": 10,
 			"alpha": 200
 		}
 	]
