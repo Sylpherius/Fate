@@ -9,7 +9,7 @@ pygame.mixer.init()
 
 # background music
 pygame.mixer.music.load("audio/" + constants.SOUND_WELP)
-pygame.mixer.music.set_volume(0)
+pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(-1)
 
 # set screen
@@ -73,7 +73,7 @@ while True:
                 if hovered_tile:
                     if not app.unit_map[hovered_tile.row][hovered_tile.col].unit:
                         app.spawn_unit(Position(hovered_tile.row, hovered_tile.col),
-                                       app.unit_info[constants.UNIT_SLIME], 'white')
+                                       app.unit_info[constants.UNIT_SLIME], app.get_alignment_turn())
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 left_click_handled = False

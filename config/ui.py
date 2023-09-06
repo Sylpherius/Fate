@@ -1,17 +1,17 @@
 from collections import namedtuple
-from typing import List
+from typing import List, Dict
 
 from config import constants
 from config.button import Button
 from config.unit import Unit
 
-InterfaceLocation = namedtuple('InterfaceLocation', ['x', 'y', 'interface'])
+InterfaceLocation = namedtuple('InterfaceLocation', ['x', 'y', 'interface_image'])
 
 
 class UI:
     def __init__(self, app):
         self.buttons: List[Button] = []
-        self.interfaces: List[InterfaceLocation] = []
+        self.interfaces: Dict[str, InterfaceLocation] = {}
         self.app = app
 
     def draw_interfaces(self, screen):
@@ -20,7 +20,7 @@ class UI:
 
         :param screen: main surface
         """
-        for x, y, interface in self.interfaces:
+        for x, y, interface in self.interfaces.values():
             screen.blit(interface, (x, y))
 
     def draw_buttons(self, screen):
@@ -47,11 +47,16 @@ class UI:
         """
         self.buttons.append(button)
 
-    def add_interface(self, interface: InterfaceLocation) -> None:
+    def add_interface(self, interface_id: str, interface: InterfaceLocation) -> None:
         """
         Adds interface to the screen
         """
-        self.interfaces.append(interface)
+        self.interfaces[interface_id] = interface
+
+    def update_interface(self, interface_id: str, interface_image):
+        if interface_id in self.interfaces:
+            x, y, old_image = self.interfaces[interface_id]
+            self.interfaces[interface_id] = InterfaceLocation(x, y, interface_image)
 
     def deselect_buttons_of_type(self, btype):
         for button in self.buttons:

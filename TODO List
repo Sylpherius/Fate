@@ -1,13 +1,14 @@
 Short-term goals:
-* Next work on basic UI?
- * big ui bar on bottom/right or smth
- * add turn indicator
+* Next work on basic UI
  * unit description when clicked on
  * just needs to be something to show some sort of info
+* Change self.ui_list to something more intuitive
 * After work on summoning tile/creature?
  * Need to implement the "leader" of each alignment
+* BREAK - clean up infrastructure + fix breaking bugs
 
 Bugs:
+* Breaks when units die during combat (likely not registering death with negative health bar)
 * Fix pathway so that ally can't end on ally space when it's attacking an enemy
 
 Long-term goals:

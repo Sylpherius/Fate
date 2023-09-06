@@ -38,6 +38,7 @@ class App:
         self.rows = 26
         self.cols = 10
         self.alignments = constants.ALIGNMENTS
+        self.alignment_indicators = {}
         self.turn = 0
 
         # six directions to adjacent tiles
@@ -51,9 +52,7 @@ class App:
     def initialize(self) -> None:
         self.load_tiles_and_units()
         self.initialize_maps()
-        default_ui = self.ui_list[constants.UI_DEFAULT]
-        default_ui.add_button(Button(constants.BUTTON_END_TURN, default_ui,
-                                     (1400, 1000), default_ui.end_turn, 200, 200))
+        self.initialize_ui()
 
     def load_tiles_and_units(self) -> None:
         """
@@ -95,6 +94,31 @@ class App:
         for neighbor, direction in self.get_neighbors(Position(5, 5)):
             tile_name = constants.TILE_DIFFICULT
             self.update_tile([Position(neighbor.row, neighbor.col)], tile_name)
+
+    def initialize_ui(self):
+        default_ui = self.ui_list[constants.UI_DEFAULT]
+
+        # add the sidebar
+        ui_map_image = pygame.image.load("assets/ui_" + constants.UI_MAP + ".png")
+        ui_map_image = pygame.transform.scale(ui_map_image,
+                                              (constants.UI_MAP_WIDTH, constants.UI_MAP_HEIGHT))
+        ui_x = constants.SCREEN_WIDTH - constants.UI_MAP_WIDTH
+        ui_y = 0
+        default_ui.add_interface(constants.UI_MAP, InterfaceLocation(ui_x, ui_y, ui_map_image))
+        default_ui.add_button(Button(constants.BUTTON_END_TURN, default_ui,
+                                     (1400, 1000), default_ui.end_turn, 200, 200))
+
+        # add the turn indicator
+        for alignment in self.alignments:
+            alignment_image = pygame.image.load("assets/turn_" + alignment + ".png")
+            alignment_image = pygame.transform.scale(alignment_image,
+                                                     (constants.UI_TURN_WIDTH, constants.UI_TURN_HEIGHT))
+            self.alignment_indicators[alignment] = alignment_image
+        ui_x = constants.SCREEN_WIDTH - constants.UI_TURN_WIDTH * 2
+        ui_y = constants.UI_TURN_HEIGHT
+
+        default_ui.add_interface(constants.UI_TURN,
+                                 InterfaceLocation(ui_x, ui_y, self.alignment_indicators[self.get_alignment_turn()]))
 
     def update(self, screen, hovered_tile: SelectedTile):
         # update tile info
@@ -241,8 +265,8 @@ class App:
         ui_mid_x = (ui_x + constants.UI_BATTLE_WIDTH) // 2
         ui_mid_y = (ui_y + constants.UI_BATTLE_HEIGHT) // 2
         battle_ui = UI(self)
-        battle_ui.add_interface(InterfaceLocation(ui_x, ui_y, ui_battle_image))
-        self.ui_list[constants.UI_BATTLE] = battle_ui
+        battle_ui.add_interface(constants.UI_BATTLE, InterfaceLocation(ui_x, ui_y, ui_battle_image))
+        self.add_ui(constants.UI_BATTLE, battle_ui)
 
         margin_x = (constants.UI_BATTLE_WIDTH - 2 * constants.BUTTON_ATTACK_WIDTH) // 4
         # adding the ally unit's attacks
@@ -483,10 +507,17 @@ class App:
          * resets all unit attack + movement
         """
         self.turn = (self.turn + 1) % len(self.alignments)
+        new_interface_indicator = self.alignment_indicators[self.alignments[self.turn]]
+        self.ui_list[constants.UI_DEFAULT].update_interface(constants.UI_TURN, new_interface_indicator)
         for unit in self.get_active_units():
             unit.set_can_attack(True)
             unit.set_movement(unit.speed)
-            unit.take_damage(2)
+
+    def get_alignment_turn(self):
+        return self.alignments[self.turn]
+
+    def add_ui(self, ui_name: str, ui: UI):
+        self.ui_list[ui_name] = ui
 
 
 def generate_attack_text(attack, attack_info) -> Tuple[List[Surface], List[Tuple[int, int]]]:

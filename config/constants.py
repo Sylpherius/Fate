@@ -16,9 +16,16 @@ SOUND_WELP = "welp.mp3"
 STATUS_POISON = "poisoned"
 
 UI_DEFAULT = "default"
+UI_MAP = "map"
+UI_MAP_WIDTH = 300
+UI_MAP_HEIGHT = 1200
+UI_TURN = "turn"
+UI_TURN_WIDTH = 100
+UI_TURN_HEIGHT = 100
 UI_BATTLE = "battle"
 UI_BATTLE_WIDTH = 1200
 UI_BATTLE_HEIGHT = 900
+
 
 BUTTON_END_TURN = "end_turn"
 BUTTON_ATTACK = "attack"
