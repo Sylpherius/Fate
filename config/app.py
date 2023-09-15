@@ -23,7 +23,7 @@ Position = namedtuple('Position', ['row', 'col'])
 
 class App:
     def __init__(self):
-        self.ui_list: Dict[str, UI] = {constants.UI_DEFAULT: UI(self)}
+        self.ui_dict: Dict[str, UI] = {constants.UI_DEFAULT: UI(self)}
         self.ui_removal_list: List[str] = []
         self.game_map: List[List[XYTile]] = []
         self.unit_map: List[List[XYUnit]] = []
@@ -96,7 +96,7 @@ class App:
             self.update_tile([Position(neighbor.row, neighbor.col)], tile_name)
 
     def initialize_ui(self):
-        default_ui = self.ui_list[constants.UI_DEFAULT]
+        default_ui = self.ui_dict[constants.UI_DEFAULT]
 
         # add the sidebar
         ui_map_image = pygame.image.load("assets/ui_" + constants.UI_MAP + ".png")
@@ -146,10 +146,16 @@ class App:
             self.overlay([Position(hovered_tile.row, hovered_tile.col)], self.tile_info[constants.TILE_CHOSEN].image,
                          screen)
 
+        # update unit info on interface
+        default_ui = self.ui_dict[constants.UI_DEFAULT]
+        text_list, text_xy_list = generate_uinfo_text(self.start_unit)
+        default_ui.update_text(constants.UI_UINFO, text_list, text_xy_list)
+
         # draw ui interfaces/buttons
-        for ui in self.ui_list.values():
+        for ui in self.ui_dict.values():
             ui.draw_interfaces(screen)
             ui.draw_buttons(screen)
+            ui.draw_text(screen)
 
     def handle_event(self, event) -> None:
         """
@@ -157,11 +163,11 @@ class App:
 
         :param event: event
         """
-        for ui in self.ui_list.values():
+        for ui in self.ui_dict.values():
             ui.handle_event(event)
 
         for ui_name in self.ui_removal_list:
-            self.ui_list.pop(ui_name)
+            self.ui_dict.pop(ui_name)
         self.ui_removal_list.clear()
 
     # Get Shortest Path ================================================================
@@ -508,7 +514,7 @@ class App:
         """
         self.turn = (self.turn + 1) % len(self.alignments)
         new_interface_indicator = self.alignment_indicators[self.alignments[self.turn]]
-        self.ui_list[constants.UI_DEFAULT].update_interface(constants.UI_TURN, new_interface_indicator)
+        self.ui_dict[constants.UI_DEFAULT].update_interface(constants.UI_TURN, new_interface_indicator)
         for unit in self.get_active_units():
             unit.set_can_attack(True)
             unit.set_movement(unit.speed)
@@ -517,7 +523,7 @@ class App:
         return self.alignments[self.turn]
 
     def add_ui(self, ui_name: str, ui: UI):
-        self.ui_list[ui_name] = ui
+        self.ui_dict[ui_name] = ui
 
 
 def generate_attack_text(attack, attack_info) -> Tuple[List[Surface], List[Tuple[int, int]]]:
@@ -536,6 +542,36 @@ def generate_attack_text(attack, attack_info) -> Tuple[List[Surface], List[Tuple
     text = str(attack_info.damage) + " - " + str(attack_info.count)
     text_list.append(constants.FONT_BATTLE.render(text, True, (0, 0, 0)))
     text_xy_list.append((10, 50))
+
+    return text_list, text_xy_list
+
+
+def generate_uinfo_text(unit: Optional[SelectedUnit]) -> Tuple[List[Surface], List[Tuple[int, int]]]:
+    """
+    Generates the unit info for a unit
+
+    :param unit: unit
+    :return: A list of the different string lines as well as their positions
+    """
+    text_list = []
+    text_xy_list = []
+    if unit:
+        unit_info = unit.unit_info
+        x = constants.SCREEN_WIDTH - constants.UI_MAP_WIDTH + constants.UI_UINFO_X_BUFFER
+        y = 300
+        text = unit_info.name
+        text_list.append(constants.FONT_DEFAULT.render(text, True, (0, 0, 0)))
+        text_xy_list.append((x, y))
+
+        y += constants.FONT_DEFAULT_SIZE + constants.UI_UINFO_Y_BUFFER
+        text = "speed: " + str(unit_info.speed)
+        text_list.append(constants.FONT_DEFAULT.render(text, True, (0, 0, 0)))
+        text_xy_list.append((x, y))
+
+        y += constants.FONT_DEFAULT_SIZE + constants.UI_UINFO_Y_BUFFER
+        text = "movement: " + str(unit_info.movement)
+        text_list.append(constants.FONT_DEFAULT.render(text, True, (0, 0, 0)))
+        text_xy_list.append((x, y))
 
     return text_list, text_xy_list
 

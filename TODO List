@@ -1,10 +1,7 @@
 Short-term goals:
-* Next work on basic UI
- * unit description when clicked on
- * just needs to be something to show some sort of info
-* Change self.ui_list to something more intuitive
 * After work on summoning tile/creature?
  * Need to implement the "leader" of each alignment
+* Edit unit info so that it's either hovered unit -> selected in terms of info, rn its just selected
 * BREAK - clean up infrastructure + fix breaking bugs
 
 Bugs:

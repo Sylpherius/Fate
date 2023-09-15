@@ -19,6 +19,9 @@ UI_DEFAULT = "default"
 UI_MAP = "map"
 UI_MAP_WIDTH = 300
 UI_MAP_HEIGHT = 1200
+UI_UINFO = "unit info"
+UI_UINFO_X_BUFFER = 50
+UI_UINFO_Y_BUFFER = 10
 UI_TURN = "turn"
 UI_TURN_WIDTH = 100
 UI_TURN_HEIGHT = 100
@@ -48,5 +51,8 @@ HEALTH_ORANGE = (186, 142, 47)
 HEALTH_RED = (163, 45, 18)
 HEALTH_BAR_RATIO = 30
 
-FONT_BATTLE = pygame.font.Font('fonts/Raleway-Light.ttf', 24)
+FONT_DEFAULT_SIZE = 24
+FONT_DEFAULT = pygame.font.Font('fonts/Raleway-Light.ttf', FONT_DEFAULT_SIZE)
+FONT_BATTLE_SIZE = 24
+FONT_BATTLE = pygame.font.Font('fonts/Raleway-Light.ttf', FONT_BATTLE_SIZE)
 
